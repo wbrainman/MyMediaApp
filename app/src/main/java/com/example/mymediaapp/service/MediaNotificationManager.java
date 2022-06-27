@@ -3,7 +3,9 @@ package com.example.mymediaapp.service;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.media.MediaDescriptionCompat;
@@ -14,8 +16,10 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.media.session.MediaButtonReceiver;
 
+import com.example.mymediaapp.MainActivity;
 import com.example.mymediaapp.R;
 
 public class MediaNotificationManager {
@@ -74,9 +78,8 @@ public class MediaNotificationManager {
                                         MediaSessionCompat.Token token) {
         boolean isPlaying = state.getState() ==PlaybackStateCompat.STATE_PLAYING;
         MediaDescriptionCompat description = metadata.getDescription();
-//        NotificationCompat.Builder builder =
-
-
+        NotificationCompat.Builder builder = buildNotification(state, token, isPlaying,description);
+        return builder.build();
     }
 
     private NotificationCompat.Builder buildNotification(@NonNull PlaybackStateCompat state,
@@ -84,9 +87,38 @@ public class MediaNotificationManager {
                                                          boolean isPlaying,
                                                          MediaDescriptionCompat description) {
         if (isAndroidOOrHigher()) {
-
+            createChannel();
         }
 
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(mService, CHANNEL_ID);
+        builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
+                .setMediaSession(token)
+                .setShowActionsInCompactView(0,1,2)
+                .setShowCancelButton(true)
+                .setCancelButtonIntent(
+                        MediaButtonReceiver.buildMediaButtonPendingIntent(mService,
+                                PlaybackStateCompat.ACTION_STOP)))
+                .setColor(ContextCompat.getColor(mService, R.color.notification_bg)) //TODO: ???
+                .setSmallIcon(R.drawable.ic_stat_image_audiotrack)
+                .setContentIntent(createContentIntent())
+                .setContentTitle(description.getTitle())
+                .setContentText(description.getSubtitle())
+                .setLargeIcon(MusicLibrary.getAlbumBitmap(mService, description.getMediaId()))
+                .setDeleteIntent(MediaButtonReceiver.buildMediaButtonPendingIntent(mService,
+                        PlaybackStateCompat.ACTION_STOP))
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+
+        if ((state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS) != 0) {
+            builder.addAction(mPrevAction);
+        }
+
+        builder.addAction(isPlaying ? mPauseAction : mPlayAction);
+
+        if ((state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_NEXT) != 0) {
+            builder.addAction(mNextAction);
+        }
+
+        return builder;
     }
 
     private boolean isAndroidOOrHigher() {return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O; }
@@ -108,8 +140,12 @@ public class MediaNotificationManager {
         }
     }
 
-
-
+    private PendingIntent createContentIntent() {
+        Intent openUI = new Intent(mService, MainActivity.class);
+        openUI.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        return PendingIntent.getActivities(
+                mService, REQUEST_ID, new Intent[]{openUI}, PendingIntent.FLAG_CANCEL_CURRENT);
+    }
 }
 
 

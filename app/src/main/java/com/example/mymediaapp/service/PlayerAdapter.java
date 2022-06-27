@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
-import android.media.MediaMetadata;
+import android.support.v4.media.MediaMetadataCompat;
 
 import androidx.annotation.NonNull;
 
@@ -34,15 +34,15 @@ public abstract class PlayerAdapter {
     private final AudioFocusHelper mAudioFocusHelper;
     private boolean mPlayOnAudioFocus = false;
 
-    private PlayerAdapter(@NonNull Context context) {
+    public PlayerAdapter(@NonNull Context context) {
         mApplicationContext = context;
         mAudioManager = (AudioManager) mApplicationContext.getSystemService(Context.AUDIO_SERVICE);
         mAudioFocusHelper = new AudioFocusHelper();
     }
 
-    public abstract void playFromMedia(MediaMetadata mediaMetadata);
+    public abstract void playFromMedia(MediaMetadataCompat mediaMetadata);
 
-    public abstract MediaMetadata getCurrentMedia();
+    public abstract MediaMetadataCompat getCurrentMedia();
 
     public abstract boolean isPlaying();
 
