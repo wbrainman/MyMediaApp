@@ -26,7 +26,8 @@ import java.util.List;
 
 public class MyMediaService extends MediaBrowserServiceCompat {
 
-    private static final String TAG =MyMediaService.class.getSimpleName();
+//    private static final String TAG =MyMediaService.class.getSimpleName();
+    private static final String TAG = "miaowuwu";
 
     private MediaSessionCompat mSession;
     private PlayerAdapter mPlayBack;

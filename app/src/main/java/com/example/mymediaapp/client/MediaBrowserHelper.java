@@ -18,7 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MediaBrowserHelper {
-    private static final String TAG = MediaBrowserHelper.class.getSimpleName();
+//    private static final String TAG = MediaBrowserHelper.class.getSimpleName();
+    private static final String TAG = "miaowuwu";
     private final Context mContext;
     private final Class<? extends MediaBrowserServiceCompat> mMediaBrowserServiceClass;
     private final List<Callback> mCallbackList = new ArrayList<>();
@@ -44,6 +45,7 @@ public class MediaBrowserHelper {
 
     public void onStart() {
         if (mMediaBrowser == null) {
+            Log.d(TAG, "onStart: in MediaBrowserHelper");
             mMediaBrowser =
                     new MediaBrowserCompat(
                             mContext,
@@ -168,6 +170,7 @@ public class MediaBrowserHelper {
         @Override
         public void onConnected() {
             // Get a MediaController for the MediaSession.
+            Log.d(TAG, "onConnected: Get a MediaController for the MediaSession");
             mMediaController =
                     new MediaControllerCompat(mContext, mMediaBrowser.getSessionToken());
             mMediaController.registerCallback(mMediaControllerCallback);

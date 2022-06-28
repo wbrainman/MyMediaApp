@@ -24,7 +24,8 @@ import com.example.mymediaapp.R;
 
 public class MediaNotificationManager {
     public static final int NOTIFICATION_ID = 412;
-    private static final String TAG = MediaNotificationManager.class.getSimpleName();
+//    private static final String TAG = MediaNotificationManager.class.getSimpleName();
+    private static final String TAG = "miaowuwu";
     private static final String CHANNEL_ID = "com.example.mymediaapp.channel";
     private static final int REQUEST_ID = 501;
 

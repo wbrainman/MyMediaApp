@@ -6,18 +6,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mymediaapp.client.MediaBrowserHelper;
+import com.example.mymediaapp.service.MusicLibrary;
 import com.example.mymediaapp.service.MyMediaService;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "miaowuwu";
     private ImageView mAlbumArt;
     private TextView mTitleTextView;
     private TextView mArtistTextView;
@@ -51,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        Log.d(TAG, "onStart: MainActivity");
         mMediaBrowserHelper.onStart();
     }
 

@@ -9,6 +9,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 
 public class MediaPlayerAdapter extends  PlayerAdapter{
 
+    private static final String TAG = "miaowuwu";
     private final Context mContext;
     private MediaPlayer mMediaPlayer;
     private String mFilename;
