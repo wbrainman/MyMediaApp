@@ -19,7 +19,7 @@ import java.util.List;
 
 public class MediaBrowserHelper {
 //    private static final String TAG = MediaBrowserHelper.class.getSimpleName();
-    private static final String TAG = "miaowuwu";
+    private static final String TAG = "miaowuwu" + MediaBrowserHelper.class.getSimpleName();
     private final Context mContext;
     private final Class<? extends MediaBrowserServiceCompat> mMediaBrowserServiceClass;
     private final List<Callback> mCallbackList = new ArrayList<>();
@@ -184,6 +184,18 @@ public class MediaBrowserHelper {
 
             mMediaBrowser.subscribe(mMediaBrowser.getRoot(), mMediaBrowserSubscriptionCallback);
         }
+
+        @Override
+        public void onConnectionFailed() {
+            super.onConnectionFailed();
+            Log.d(TAG, "onConnectionFailed: Get a MediaController for the MediaSession");
+        }
+
+        @Override
+        public void onConnectionSuspended() {
+            super.onConnectionSuspended();
+            Log.d(TAG, "onConnectionFailed: Get a MediaController for the MediaSession");
+        }
     }
 
     // Receives callbacks from the MediaBrowser when the MediaBrowserService has loaded new media
@@ -206,6 +218,7 @@ public class MediaBrowserHelper {
             performOnAllCallbacks(new CallbackCommand() {
                 @Override
                 public void perform(@NonNull Callback callback) {
+                    Log.d(TAG, "onMetadataChanged perform: ");
                     callback.onMetadataChanged(metadata);
                 }
             });
@@ -216,6 +229,7 @@ public class MediaBrowserHelper {
             performOnAllCallbacks(new CallbackCommand() {
                 @Override
                 public void perform(@NonNull Callback callback) {
+                    Log.d(TAG, "onPlaybackStateChanged perform: ");
                     callback.onPlaybackStateChanged(state);
                 }
             });

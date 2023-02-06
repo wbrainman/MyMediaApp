@@ -6,10 +6,11 @@ import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 
 public class MediaPlayerAdapter extends  PlayerAdapter{
 
-    private static final String TAG = "miaowuwu";
+    private static final String TAG = "miaowuwu" +MediaPlayerAdapter.class.getSimpleName();
     private final Context mContext;
     private MediaPlayer mMediaPlayer;
     private String mFilename;
@@ -58,6 +59,7 @@ public class MediaPlayerAdapter extends  PlayerAdapter{
     public void playFromMedia(MediaMetadataCompat mediaMetadata) {
         mCurrentMedia = mediaMetadata;
         final String mediaId = mediaMetadata.getDescription().getMediaId();
+        Log.d(TAG, "playFromMedia: mediaId " + mediaId);
         playFile(MusicLibrary.getMusicFilename(mediaId));
     }
 
@@ -67,6 +69,7 @@ public class MediaPlayerAdapter extends  PlayerAdapter{
     }
 
     private void playFile(String filename) {
+        Log.d(TAG, "playFile: filename " + filename);
         boolean mediaChanged = (mFilename == null || !filename.equals(mFilename));
         if (mCurrentMediaPlayedToCompletion) {
             // Last audio file was played to completion, the resourceId hasn't changed, but the
@@ -76,6 +79,7 @@ public class MediaPlayerAdapter extends  PlayerAdapter{
         }
         if (!mediaChanged) {
             if (!isPlaying()) {
+                Log.d(TAG, "playFile: filename 111 " + filename);
                 play();
             }
             return;
@@ -85,6 +89,7 @@ public class MediaPlayerAdapter extends  PlayerAdapter{
 
         mFilename = filename;
 
+        Log.d(TAG, "playFile: filename 222 " + filename);
         initializeMediaPlayer();
 
         try {
